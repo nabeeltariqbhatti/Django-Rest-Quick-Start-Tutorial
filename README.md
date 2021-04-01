@@ -28,46 +28,46 @@ django-admin startapp quickstart
 cd ..
 The project layout should look like:
 
-$ pwd
-<some path>/tutorial
-$ find .
+$ pwd<br/>
+<some path>/tutorial<br/>
+$ find .<br/>
 .
-./manage.py
-./tutorial
-./tutorial/__init__.py
-./tutorial/quickstart
-./tutorial/quickstart/__init__.py
-./tutorial/quickstart/admin.py
-./tutorial/quickstart/apps.py
-./tutorial/quickstart/migrations
-./tutorial/quickstart/migrations/__init__.py
-./tutorial/quickstart/models.py
-./tutorial/quickstart/tests.py
-./tutorial/quickstart/views.py
-./tutorial/settings.py
-./tutorial/urls.py
-./tutorial/wsgi.py
-It may look unusual that the application has been created within the project directory. Using the project's namespace avoids name clashes with external modules (a topic that goes outside the scope of the quickstart).
+./manage.py<br/>
+./tutorial<br/>
+./tutorial/__init__.py<br/>
+./tutorial/quickstart<br/>
+./tutorial/quickstart/__init__.py<br/>
+./tutorial/quickstart/admin.py<br/>
+./tutorial/quickstart/apps.py<br/>
+./tutorial/quickstart/migrations<br/>
+./tutorial/quickstart/migrations/__init__.py<br/>
+./tutorial/quickstart/models.py<br/>
+./tutorial/quickstart/tests.py<br/>
+./tutorial/quickstart/views.py<br/>
+./tutorial/settings.py<br/>
+./tutorial/urls.py<br/>
+./tutorial/wsgi.py<br/>
+It may look unusual that the application has been created within the project directory. Using the project's namespace avoids name clashes with external modules (a topic that goes outside the scope of the quickstart).<br/>
 
-Now sync your database for the first time:
+Now sync your database for the first time:<br/>
 
-python manage.py migrate
-We'll also create an initial user named admin with a password of password123. We'll authenticate as that user later in our example.
+python manage.py migrate<br/>
+We'll also create an initial user named admin with a password of password123. We'll authenticate as that user later in our example.<br/>
 
-python manage.py createsuperuser --email admin@example.com --username admin
-Once you've set up a database and the initial user is created and ready to go, open up the app's directory and we'll get coding...
+python manage.py createsuperuser --email admin@example.com --username admin <br/>
+Once you've set up a database and the initial user is created and ready to go, open up the app's directory and we'll get coding...<br/>
 
 Serializers
-First up we're going to define some serializers. Let's create a new module named tutorial/quickstart/serializers.py that we'll use for our data representations.
+First up we're going to define some serializers. Let's create a new module named tutorial/quickstart/serializers.py that we'll use for our data representations.<br/>
 
-from django.contrib.auth.models import User, Group
-from rest_framework import serializers
+from django.contrib.auth.models import User, Group<br/>
+from rest_framework import serializers<br/>
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'groups']
+class UserSerializer(serializers.HyperlinkedModelSerializer):<br/>
+    class Meta:<br/>
+        model = User<br/>
+        fields = ['url', 'username', 'email', 'groups']<br/>
 
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
@@ -79,49 +79,49 @@ Notice that we're using hyperlinked relations in this case with HyperlinkedModel
 Views
 Right, we'd better write some views then. Open tutorial/quickstart/views.py and get typing.
 
-from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from rest_framework import permissions
-from tutorial.quickstart.serializers import UserSerializer, GroupSerializer
+from django.contrib.auth.models import User, Group<br/>
+from rest_framework import viewsets<br/>
+from rest_framework import permissions<br/>
+from tutorial.quickstart.serializers import UserSerializer, GroupSerializer<br/>
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):<br/>
     """
     API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    """<br/>
+    queryset = User.objects.all().order_by('-date_joined')<br/>
+    serializer_class = UserSerializer<br/>
+    permission_classes = [permissions.IsAuthenticated]<br/>
 
 
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupViewSet(viewsets.ModelViewSet):<br/>
     """
     API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
-Rather than write multiple views we're grouping together all the common behavior into classes called ViewSets.
+    """<br/>
+    queryset = Group.objects.all()<br/>
+    serializer_class = GroupSerializer<br/>
+    permission_classes = [permissions.IsAuthenticated]<br/>
+Rather than write multiple views we're grouping together all the common behavior into classes called ViewSets.<br/>
 
-We can easily break these down into individual views if we need to, but using viewsets keeps the view logic nicely organized as well as being very concise.
+We can easily break these down into individual views if we need to, but using viewsets keeps the view logic nicely organized as well as being very concise.<br/>
 
-URLs
-Okay, now let's wire up the API URLs. On to tutorial/urls.py...
+URLs<br/>
+Okay, now let's wire up the API URLs. On to tutorial/urls.py...<br/>
 
-from django.urls import include, path
-from rest_framework import routers
-from tutorial.quickstart import views
+from django.urls import include, path<br/>
+from rest_framework import routers<br/>
+from tutorial.quickstart import views<br/>
 
-router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
+router = routers.DefaultRouter()<br/>
+router.register(r'users', views.UserViewSet)<br/>
+router.register(r'groups', views.GroupViewSet)<br/>
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
-urlpatterns = [
-    path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-]
+# Wire up our API using automatic URL routing.<br/>
+# Additionally, we include login URLs for the browsable API.<br/>
+urlpatterns = [<br/>
+    path('', include(router.urls)),<br/>
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))<br/>
+]<br/>
 Because we're using viewsets instead of views, we can automatically generate the URL conf for our API, by simply registering the viewsets with a router class.<br/>
 
 Again, if we need more control over the API URLs we can simply drop down to using regular class-based views, and writing the URL conf explicitly.<br/>
