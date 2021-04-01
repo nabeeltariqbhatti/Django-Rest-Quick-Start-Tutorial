@@ -203,7 +203,7 @@ HTTP/1.1 200 OK
 
 <br/>
 <br/>
-[Please go to documentation](https://www.django-rest-framework.org/tutorial/1-serialization/)
+[Documentation](https://www.django-rest-framework.org/tutorial/1-serialization/)
 
 
 Introduction<br/>
