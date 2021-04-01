@@ -122,9 +122,9 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
-Because we're using viewsets instead of views, we can automatically generate the URL conf for our API, by simply registering the viewsets with a router class.
+Because we're using viewsets instead of views, we can automatically generate the URL conf for our API, by simply registering the viewsets with a router class.<br/>
 
-Again, if we need more control over the API URLs we can simply drop down to using regular class-based views, and writing the URL conf explicitly.
+Again, if we need more control over the API URLs we can simply drop down to using regular class-based views, and writing the URL conf explicitly.<br/>
 
 Finally, we're including default login and logout views for use with the browsable API. That's optional, but useful if your API requires authentication and you want to use the browsable API.
 
@@ -147,7 +147,7 @@ Okay, we're done.
 Testing our API
 We're now ready to test the API we've built. Let's fire up the server from the command line.
 
-python manage.py runserver
+python manage.py runserver<br/>
 We can now access our API, both from the command-line, using tools like curl...
 
 bash: curl -H 'Accept: application/json; indent=4' -u admin:password123 http://127.0.0.1:8000/users/
@@ -170,7 +170,7 @@ bash: curl -H 'Accept: application/json; indent=4' -u admin:password123 http://1
         }
     ]
 }
-Or using the httpie, command line tool...
+Or using the httpie, command line tool...<br/>
 
 bash: http -a admin:password123 http://127.0.0.1:8000/users/
 
@@ -199,4 +199,4 @@ HTTP/1.1 200 OK
 
 
 
-![https://www.django-rest-framework.org/img/quickstart.png]
+![](https://www.django-rest-framework.org/img/quickstart.png)
