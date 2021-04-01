@@ -1,55 +1,76 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+
+from rest_framework.response import Response
+
 from .models import Category, Post
 from blog.serializers import CategorySerializer, PostSerializer
 
-@csrf_exempt
 
-def post_list(request):
-    """
-    List all code Posts, or create a new Post.
-    """
-    if request.method == 'GET':
+from rest_framework import status
+from rest_framework.decorators import APIView
+from rest_framework.response import Response
+from rest_framework import generics
+
+# class POSTList(APIView):
+#     """
+#     List all code Posts, or create a new Post.
+#     """
+#     def get(self,request,form=None):
        
-        posts = Post.objects.all()
+#         posts = Post.objects.all()
      
-        serializer = PostSerializer(posts, many=True)
+#         serializer = PostSerializer(posts, many=True)
  
-        return JsonResponse(serializer.data, safe=False)
+#         return Response(serializer.data)
 
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = PostSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+#     def post(self,request,form=None):
+      
+#         serializer = PostSerializer(data=request.data,many=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HHT_400_BAD_REQUEST)
 
 
 
-@csrf_exempt
-def post_detail(request, pk):
-    """
-    Retrieve, update or delete a code snippet.
-    """
-    try:
-        post = Post.objects.get(pk=pk)
-    except Post.DoesNotExist:
-        return HttpResponse(status=404)
+# class PostDetail(APIView):
+#     """
+#     Retrieve, update or delete a code snippet.
+#     """
+#     def get_object(self,request,pk):
+#         try:
+#            post = Post.objects.get(pk=pk)
 
-    if request.method == 'GET':
-        serializer = PostSerializer(post)
-        return JsonResponse(serializer.data)
+#         except Post.DoesNotExist:
 
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = PostSerializer(post, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
+#            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    elif request.method == 'DELETE':
-        post.delete()
-        return HttpResponse(status=204)
+#     def get(self,request,pk,form=None):
+#         post=self.get_object(pk=pk)
+#         serializer = PostSerializer(post)
+#         return Response(serializer.data)
+
+#     def put(self,request,pk,form=None):
+#         post=self.get_object(pk=pk)
+#         data = JSONParser().parse(request)
+#         serializer = PostSerializer(post, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     def delete(self,request,pk,form=None):
+#         post=self.get_object(pk=pk)
+#         post.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT,)
+
+
+
+
+class POSTList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer

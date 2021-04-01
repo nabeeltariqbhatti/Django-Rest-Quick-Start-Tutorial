@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.urls import path
-from .views import post_list, post_detail
+from .views import POSTList,PostDetail
+
+
 
 urlpatterns = [
-    path('', post_list, name='list'),
-    path('<pk>/', post_detail, name='post_detail'),
+    path('', POSTList.as_view(), name='list'),
+    path('<pk>/', PostDetail.as_view(), name='post_detail'),
 ]
