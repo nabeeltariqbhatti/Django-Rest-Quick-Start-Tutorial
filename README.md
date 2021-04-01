@@ -200,6 +200,9 @@ HTTP/1.1 200 OK
 
 
 ![](https://www.django-rest-framework.org/img/quickstart.png)
+
+<br/>
+<br/>
 [Please go to documentation](https://www.django-rest-framework.org/tutorial/1-serialization/)
 
 
